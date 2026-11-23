@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><base href="https://d16ilfvy4mv02r.cloudfront.net/workspaces/oj6whXxXZcGgFL29qU1GANH9cU37DTrO/9ff29468-60e3-48f3-9a68-a4b9c89c6e5f/files/">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Startup Sathi — Pilot Insight Dashboard</title>
+<style>
+  :root {
+    --bg:#0b0716; --panel:#150e2b; --panel2:#1c1338; --ink:#f6f1ff;
+    --muted:#a99bc9; --line:rgba(255,255,255,.09);
+    --rose:#ff5d8f; --violet:#7c5cff; --teal:#00c2a8; --amber:#ff9f1c; --blue:#3b82f6; --lime:#84cc16;
+  }
+  * { box-sizing:border-box; }
+  body {
+    margin:0; padding:34px 22px 60px; color:var(--ink);
+    font-family:"Segoe UI", system-ui, -apple-system, "Helvetica Neue", Arial, sans-serif;
+    background:
+      radial-gradient(900px 500px at 8% -10%, rgba(124,92,255,.42), transparent 60%),
+      radial-gradient(800px 500px at 96% 4%, rgba(255,93,143,.32), transparent 58%),
+      radial-gradient(700px 600px at 50% 108%, rgba(0,194,168,.26), transparent 62%),
+      var(--bg);
+    background-attachment:fixed;
+  }
+  .wrap { max-width:1240px; margin:0 auto; }
+  header.hero { margin-bottom:26px; }
+  .eyebrow {
+    display:inline-flex; align-items:center; gap:8px; font-size:12px; letter-spacing:.16em;
+    text-transform:uppercase; color:#e9dcff; background:rgba(124,92,255,.18);
+    border:1px solid rgba(124,92,255,.5); padding:7px 14px; border-radius:999px;
+  }
+  .eyebrow i { width:8px; height:8px; border-radius:50%; background:var(--teal); box-shadow:0 0 12px var(--teal); }
+  h1 {
+    font-size:clamp(30px,4.6vw,52px); line-height:1.04; margin:16px 0 10px; letter-spacing:-.02em;
+    background:linear-gradient(100deg,#fff 6%,#ffd6e6 34%,#c8b6ff 62%,#8ff5e4 96%);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .sub { max-width:760px; color:var(--muted); font-size:15.5px; line-height:1.6; margin:0; }
+  .flag {
+    margin-top:16px; display:inline-block; font-size:12.5px; color:#ffd9a3;
+    background:rgba(255,159,28,.12); border:1px dashed rgba(255,159,28,.55);
+    padding:9px 14px; border-radius:10px;
+  }
+  .kpis { display:grid; grid-template-columns:repeat(6,1fr); gap:12px; margin:26px 0 8px; }
+  .kpi {
+    position:relative; overflow:hidden; padding:16px 15px 15px; border-radius:16px;
+    background:linear-gradient(160deg, rgba(255,255,255,.075), rgba(255,255,255,.02));
+    border:1px solid var(--line); backdrop-filter:blur(6px);
+  }
+  .kpi::after { content:""; position:absolute; inset:0 auto 0 0; width:3px; background:var(--c); }
+  .kpi-k { display:block; font-size:11.5px; text-transform:uppercase; letter-spacing:.09em; color:var(--muted); }
+  .kpi-v { display:block; font-size:30px; font-weight:750; margin:7px 0 2px; color:#fff; }
+  .kpi-d { display:block; font-size:11.5px; color:var(--muted); }
+  section {
+    background:linear-gradient(180deg, rgba(255,255,255,.055), rgba(255,255,255,.018));
+    border:1px solid var(--line); border-radius:20px; padding:22px 22px 24px; margin-top:16px;
+  }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+  .grid3 { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+  section h2 { font-size:15px; letter-spacing:.12em; text-transform:uppercase; margin:0 0 4px; color:#e7dcff; }
+  section > p.cap { margin:0 0 18px; color:var(--muted); font-size:12.8px; }
+  h4 { margin:0; font-size:14px; font-weight:600; }
+  .bar-row { display:grid; grid-template-columns:minmax(120px,40%) 1fr 62px; gap:10px; align-items:center; margin-bottom:9px; }
+  .bar-label { font-size:12.8px; color:#dcd2f2; line-height:1.25; }
+  .bar-track { height:10px; border-radius:99px; background:rgba(255,255,255,.075); overflow:hidden; }
+  .bar-fill { height:100%; border-radius:99px; animation:grow 1s cubic-bezier(.2,.8,.2,1) both; }
+  @keyframes grow { from { width:0 !important; } }
+  .bar-val { text-align:right; font-size:13px; font-weight:700; color:#fff; }
+  .bar-val span { display:block; font-size:10.5px; font-weight:500; color:var(--muted); }
+  .donut-wrap { display:flex; gap:22px; align-items:center; flex-wrap:wrap; }
+  .donut { width:190px; height:190px; flex:0 0 auto; }
+  .donut-num { fill:#fff; font-size:34px; font-weight:750; }
+  .donut-cap { fill:#a99bc9; font-size:10px; letter-spacing:.14em; text-transform:uppercase; }
+  ul.legend { list-style:none; margin:0; padding:0; flex:1 1 220px; }
+  ul.legend li { display:flex; align-items:center; gap:8px; font-size:13px; padding:6px 0; border-bottom:1px dashed rgba(255,255,255,.07); }
+  ul.legend li:last-child { border-bottom:none; }
+  ul.legend b { margin-left:auto; }
+  ul.legend em { font-style:normal; color:var(--muted); font-size:11.5px; width:38px; text-align:right; }
+  .dot { width:9px; height:9px; border-radius:50%; flex:0 0 auto; }
+  .likert { background:rgba(0,0,0,.18); border:1px solid var(--line); border-radius:14px; padding:14px 14px 10px; }
+  .lik-head { display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:12px; }
+  .lik-avg { font-size:22px; font-weight:750; color:#fff; }
+  .lik-avg small { font-size:11px; color:var(--muted); font-weight:500; }
+  .lik-grid { display:grid; grid-template-columns:repeat(5,1fr); gap:7px; align-items:end; height:104px; }
+  .lik-cell { position:relative; display:flex; flex-direction:column; justify-content:flex-end; height:100%; text-align:center; }
+  .lik-bar { border-radius:7px 7px 3px 3px; min-height:4px; }
+  .lik-n { font-size:11.5px; font-weight:700; margin-top:5px; }
+  .lik-s { position:absolute; bottom:-16px; left:0; right:0; font-size:9.5px; color:var(--muted); }
+  .pill {
+    display:inline-flex; align-items:center; gap:9px; padding:8px 13px; border-radius:999px;
+    font-size:12.6px; margin:0 7px 8px 0; color:#f2ecff;
+    background:color-mix(in srgb, var(--c) 14%, transparent);
+    border:1px solid color-mix(in srgb, var(--c) 45%, transparent);
+  }
+  .pill b { color:var(--c); font-weight:800; }
+  .quotes { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .quote { margin:0; padding:16px 16px 12px; border-radius:14px; background:rgba(255,255,255,.045); border-left:3px solid var(--rose); }
+  .quote blockquote { margin:0; font-size:13px; line-height:1.55; color:#e6dcfb; }
+  .quote figcaption { margin-top:10px; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  .insight { border-radius:14px; padding:15px 16px; background:linear-gradient(150deg, rgba(0,194,168,.14), rgba(124,92,255,.10)); border:1px solid rgba(0,194,168,.3); }
+  .insight b { color:#8ff5e4; }
+  .insight p { margin:6px 0 0; font-size:13px; line-height:1.6; color:#ded5f5; }
+  footer { margin-top:26px; padding-top:16px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; line-height:1.7; }
+  @media (max-width:1040px) {
+    .kpis { grid-template-columns:repeat(3,1fr); }
+    .grid2, .grid3, .quotes { grid-template-columns:1fr; }
+  }
+  @media (max-width:620px) {
+    body { padding:22px 13px 40px; }
+    .kpis { grid-template-columns:repeat(2,1fr); }
+    .bar-row { grid-template-columns:minmax(96px,44%) 1fr 52px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="hero">
+    <span class="eyebrow"><i></i>Pilot study · design input</span>
+    <h1>AI Startup Sathi</h1>
+    <p class="sub">What 56 women student entrepreneurs from non-STEM disciplines told us they need — the problems they cannot solve alone, how confident they feel with AI, and which mentoring features they would actually use.</p>
+    <div class="flag">⚠ <b>Pilot sample, n = 56.</b> Self-reported answers from a small convenience sample — directionally useful for product design, not a statistically representative survey.</div>
+  </header>
+
+  <div class="kpis"><div class="kpi" style="--c:#ff5d8f"><span class="kpi-k">Respondents</span><span class="kpi-v">56</span><span class="kpi-d">pilot interviews</span></div><div class="kpi" style="--c:#7c5cff"><span class="kpi-k">First-generation</span><span class="kpi-v">33</span><span class="kpi-d">59% of the sample</span></div><div class="kpi" style="--c:#00c2a8"><span class="kpi-k">Entrepreneurial interest</span><span class="kpi-v">4.27</span><span class="kpi-d">mean, 1–5 scale</span></div><div class="kpi" style="--c:#ff9f1c"><span class="kpi-k">AI confidence</span><span class="kpi-v">2.88</span><span class="kpi-d">mean, 1–5 scale</span></div><div class="kpi" style="--c:#3b82f6"><span class="kpi-k">Mentor access</span><span class="kpi-v">2.80</span><span class="kpi-d">mean ease, 1–5</span></div><div class="kpi" style="--c:#84cc16"><span class="kpi-k">Would try Sathi</span><span class="kpi-v">84%</span><span class="kpi-d">definitely + probably</span></div></div>
+
+  <section>
+    <h2>Who the pilot reached</h2>
+    <p class="cap">Discipline mix, year of study and family entrepreneurial background.</p>
+    <div class="grid2">
+      <div>
+        <h4 style="margin-bottom:14px">Study field</h4>
+        <div class="donut-wrap"><svg viewBox="0 0 190 190" class="donut" role="img"><circle cx="95.0" cy="95.0" r="62" fill="none" stroke="#ff5d8f" stroke-width="26" stroke-dasharray="160.00 229.56" stroke-dashoffset="-0.00" transform="rotate(-90 95.0 95.0)" stroke-linecap="butt"><title>Commerce: 23</title></circle><circle cx="95.0" cy="95.0" r="62" fill="none" stroke="#7c5cff" stroke-width="26" stroke-dasharray="83.48 306.08" stroke-dashoffset="-160.00" transform="rotate(-90 95.0 95.0)" stroke-linecap="butt"><title>Arts / Humanities: 12</title></circle><circle cx="95.0" cy="95.0" r="62" fill="none" stroke="#00c2a8" stroke-width="26" stroke-dasharray="69.56 319.99" stroke-dashoffset="-243.47" transform="rotate(-90 95.0 95.0)" stroke-linecap="butt"><title>Banking &amp; Finance: 10</title></circle><circle cx="95.0" cy="95.0" r="62" fill="none" stroke="#ff9f1c" stroke-width="26" stroke-dasharray="62.61 326.95" stroke-dashoffset="-313.04" transform="rotate(-90 95.0 95.0)" stroke-linecap="butt"><title>Management: 9</title></circle><circle cx="95.0" cy="95.0" r="62" fill="none" stroke="#3b82f6" stroke-width="26" stroke-dasharray="13.91 375.64" stroke-dashoffset="-375.64" transform="rotate(-90 95.0 95.0)" stroke-linecap="butt"><title>Science: 2</title></circle><text x="95.0" y="93.0" text-anchor="middle" class="donut-num">56</text><text x="95.0" y="113.0" text-anchor="middle" class="donut-cap">responses</text></svg><ul class="legend"><li><span class="dot" style="background:#ff5d8f"></span>Commerce<b>23</b><em>41%</em></li><li><span class="dot" style="background:#7c5cff"></span>Arts / Humanities<b>12</b><em>21%</em></li><li><span class="dot" style="background:#00c2a8"></span>Banking &amp; Finance<b>10</b><em>18%</em></li><li><span class="dot" style="background:#ff9f1c"></span>Management<b>9</b><em>16%</em></li><li><span class="dot" style="background:#3b82f6"></span>Science<b>2</b><em>4%</em></li></ul></div>
+      </div>
+      <div>
+        <h4 style="margin-bottom:14px">Where they are in the journey</h4>
+        <div class="bar-row" title="Exploring whether idea is practical — 14 students (25%)"><div class="bar-label">Exploring whether idea is practical</div><div class="bar-track"><div class="bar-fill" style="width:100.0%;background:linear-gradient(90deg,#7c5cff,#7c5cffbb)"></div></div><div class="bar-val">14<span>25%</span></div></div>
+<div class="bar-row" title="Have a business idea; no action taken — 13 students (23%)"><div class="bar-label">Have a business idea; no action taken</div><div class="bar-track"><div class="bar-fill" style="width:92.9%;background:linear-gradient(90deg,#9b7bff,#9b7bffbb)"></div></div><div class="bar-val">13<span>23%</span></div></div>
+<div class="bar-row" title="Interested but no business idea yet — 11 students (20%)"><div class="bar-label">Interested but no business idea yet</div><div class="bar-track"><div class="bar-fill" style="width:78.6%;background:linear-gradient(90deg,#b79bff,#b79bffbb)"></div></div><div class="bar-val">11<span>20%</span></div></div>
+<div class="bar-row" title="Prepared a basic business model — 8 students (14%)"><div class="bar-label">Prepared a basic business model</div><div class="bar-track"><div class="bar-fill" style="width:57.1%;background:linear-gradient(90deg,#cfbcff,#cfbcffbb)"></div></div><div class="bar-val">8<span>14%</span></div></div>
+<div class="bar-row" title="Discussed idea with potential customers — 6 students (11%)"><div class="bar-label">Discussed idea with potential customers</div><div class="bar-track"><div class="bar-fill" style="width:42.9%;background:linear-gradient(90deg,#e2d6ff,#e2d6ffbb)"></div></div><div class="bar-val">6<span>11%</span></div></div>
+<div class="bar-row" title="Already running a small venture — 4 students (7%)"><div class="bar-label">Already running a small venture</div><div class="bar-track"><div class="bar-fill" style="width:28.6%;background:linear-gradient(90deg,#f0e9ff,#f0e9ffbb)"></div></div><div class="bar-val">4<span>7%</span></div></div>
+        <div style="margin-top:14px"><span class="pill" style="--c:#00c2a8">First-generation<b>33</b></span><span class="pill" style="--c:#2fd4bd">Family business<b>11</b></span><span class="pill" style="--c:#63e0cd">No family business<b>45</b></span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>The single most urgent challenge</h2>
+    <p class="cap">Each respondent picked one item as most urgent — this is the real entry point for the mentor.</p>
+    <div class="bar-row" title="Identifying a real customer problem — 14 students (25%)"><div class="bar-label">Identifying a real customer problem</div><div class="bar-track"><div class="bar-fill" style="width:100.0%;background:linear-gradient(90deg,#ff5d8f,#ff5d8fbb)"></div></div><div class="bar-val">14<span>25%</span></div></div>
+<div class="bar-row" title="Finding an experienced mentor — 6 students (11%)"><div class="bar-label">Finding an experienced mentor</div><div class="bar-track"><div class="bar-fill" style="width:42.9%;background:linear-gradient(90deg,#ff8fab,#ff8fabbb)"></div></div><div class="bar-val">6<span>11%</span></div></div>
+<div class="bar-row" title="Limited professional networks — 5 students (9%)"><div class="bar-label">Limited professional networks</div><div class="bar-track"><div class="bar-fill" style="width:35.7%;background:linear-gradient(90deg,#ffb3c6,#ffb3c6bb)"></div></div><div class="bar-val">5<span>9%</span></div></div>
+<div class="bar-row" title="Conducting market research — 5 students (9%)"><div class="bar-label">Conducting market research</div><div class="bar-track"><div class="bar-fill" style="width:35.7%;background:linear-gradient(90deg,#ffc9d4,#ffc9d4bb)"></div></div><div class="bar-val">5<span>9%</span></div></div>
+<div class="bar-row" title="Estimating costs and setting prices — 5 students (9%)"><div class="bar-label">Estimating costs and setting prices</div><div class="bar-track"><div class="bar-fill" style="width:35.7%;background:linear-gradient(90deg,#ffdbe3,#ffdbe3bb)"></div></div><div class="bar-val">5<span>9%</span></div></div>
+<div class="bar-row" title="Balancing studies and other responsibilities — 3 students (5%)"><div class="bar-label">Balancing studies and other responsibilities</div><div class="bar-track"><div class="bar-fill" style="width:21.4%;background:linear-gradient(90deg,#ffe8ee,#ffe8eebb)"></div></div><div class="bar-val">3<span>5%</span></div></div>
+<div class="bar-row" title="Marketing a product/service — 3 students (5%)"><div class="bar-label">Marketing a product/service</div><div class="bar-track"><div class="bar-fill" style="width:21.4%;background:linear-gradient(90deg,#ffe8ee,#ffe8eebb)"></div></div><div class="bar-val">3<span>5%</span></div></div>
+<div class="bar-row" title="Finding potential customers — 3 students (5%)"><div class="bar-label">Finding potential customers</div><div class="bar-track"><div class="bar-fill" style="width:21.4%;background:linear-gradient(90deg,#ffe8ee,#ffe8eebb)"></div></div><div class="bar-val">3<span>5%</span></div></div>
+<div class="bar-row" title="Preparing a business plan — 2 students (4%)"><div class="bar-label">Preparing a business plan</div><div class="bar-track"><div class="bar-fill" style="width:14.3%;background:linear-gradient(90deg,#ffe8ee,#ffe8eebb)"></div></div><div class="bar-val">2<span>4%</span></div></div>
+<div class="bar-row" title="Lack of confidence/fear of failure — 2 students (4%)"><div class="bar-label">Lack of confidence/fear of failure</div><div class="bar-track"><div class="bar-fill" style="width:14.3%;background:linear-gradient(90deg,#ffe8ee,#ffe8eebb)"></div></div><div class="bar-val">2<span>4%</span></div></div>
+  </section>
+
+  <div class="grid2">
+    <section>
+      <h2>Every challenge reported</h2>
+      <p class="cap">Multi-select; a student could name several.</p>
+      <div class="bar-row" title="Finding an experienced mentor — 43 students (77%)"><div class="bar-label">Finding an experienced mentor</div><div class="bar-track"><div class="bar-fill" style="width:100.0%;background:linear-gradient(90deg,#ff9f1c,#ff9f1cbb)"></div></div><div class="bar-val">43<span>77%</span></div></div>
+<div class="bar-row" title="Identifying a real customer problem — 36 students (64%)"><div class="bar-label">Identifying a real customer problem</div><div class="bar-track"><div class="bar-fill" style="width:83.7%;background:linear-gradient(90deg,#ffb545,#ffb545bb)"></div></div><div class="bar-val">36<span>64%</span></div></div>
+<div class="bar-row" title="Limited professional networks — 20 students (36%)"><div class="bar-label">Limited professional networks</div><div class="bar-track"><div class="bar-fill" style="width:46.5%;background:linear-gradient(90deg,#ffc76e,#ffc76ebb)"></div></div><div class="bar-val">20<span>36%</span></div></div>
+<div class="bar-row" title="Preparing a business plan — 17 students (30%)"><div class="bar-label">Preparing a business plan</div><div class="bar-track"><div class="bar-fill" style="width:39.5%;background:linear-gradient(90deg,#ffd89b,#ffd89bbb)"></div></div><div class="bar-val">17<span>30%</span></div></div>
+<div class="bar-row" title="Estimating costs and setting prices — 15 students (27%)"><div class="bar-label">Estimating costs and setting prices</div><div class="bar-track"><div class="bar-fill" style="width:34.9%;background:linear-gradient(90deg,#ffe8c4,#ffe8c4bb)"></div></div><div class="bar-val">15<span>27%</span></div></div>
+<div class="bar-row" title="Understanding government schemes — 13 students (23%)"><div class="bar-label">Understanding government schemes</div><div class="bar-track"><div class="bar-fill" style="width:30.2%;background:linear-gradient(90deg,#fff4e2,#fff4e2bb)"></div></div><div class="bar-val">13<span>23%</span></div></div>
+<div class="bar-row" title="Finding potential customers — 11 students (20%)"><div class="bar-label">Finding potential customers</div><div class="bar-track"><div class="bar-fill" style="width:25.6%;background:linear-gradient(90deg,#fff4e2,#fff4e2bb)"></div></div><div class="bar-val">11<span>20%</span></div></div>
+<div class="bar-row" title="Lack of confidence/fear of failure — 10 students (18%)"><div class="bar-label">Lack of confidence/fear of failure</div><div class="bar-track"><div class="bar-fill" style="width:23.3%;background:linear-gradient(90deg,#fff4e2,#fff4e2bb)"></div></div><div class="bar-val">10<span>18%</span></div></div>
+<div class="bar-row" title="Balancing studies and other responsibilities — 10 students (18%)"><div class="bar-label">Balancing studies and other responsibilities</div><div class="bar-track"><div class="bar-fill" style="width:23.3%;background:linear-gradient(90deg,#fff4e2,#fff4e2bb)"></div></div><div class="bar-val">10<span>18%</span></div></div>
+<div class="bar-row" title="Marketing a product/service — 10 students (18%)"><div class="bar-label">Marketing a product/service</div><div class="bar-track"><div class="bar-fill" style="width:23.3%;background:linear-gradient(90deg,#fff4e2,#fff4e2bb)"></div></div><div class="bar-val">10<span>18%</span></div></div>
+<div class="bar-row" title="Finding a suitable business idea — 9 students (16%)"><div class="bar-label">Finding a suitable business idea</div><div class="bar-track"><div class="bar-fill" style="width:20.9%;background:linear-gradient(90deg,#fff4e2,#fff4e2bb)"></div></div><div class="bar-val">9<span>16%</span></div></div>
+<div class="bar-row" title="Conducting market research — 9 students (16%)"><div class="bar-label">Conducting market research</div><div class="bar-track"><div class="bar-fill" style="width:20.9%;background:linear-gradient(90deg,#fff4e2,#fff4e2bb)"></div></div><div class="bar-val">9<span>16%</span></div></div>
+    </section>
+    <section>
+      <h2>What they want to walk away with</h2>
+      <p class="cap">Desired primary outcome of a mentoring session.</p>
+      <div class="bar-row" title="Prepare a financial plan — 14 students (25%)"><div class="bar-label">Prepare a financial plan</div><div class="bar-track"><div class="bar-fill" style="width:100.0%;background:linear-gradient(90deg,#00c2a8,#00c2a8bb)"></div></div><div class="bar-val">14<span>25%</span></div></div>
+<div class="bar-row" title="Prepare a startup pitch — 10 students (18%)"><div class="bar-label">Prepare a startup pitch</div><div class="bar-track"><div class="bar-fill" style="width:71.4%;background:linear-gradient(90deg,#2fd4bd,#2fd4bdbb)"></div></div><div class="bar-val">10<span>18%</span></div></div>
+<div class="bar-row" title="Understand target customers — 9 students (16%)"><div class="bar-label">Understand target customers</div><div class="bar-track"><div class="bar-fill" style="width:64.3%;background:linear-gradient(90deg,#63e0cd,#63e0cdbb)"></div></div><div class="bar-val">9<span>16%</span></div></div>
+<div class="bar-row" title="Become more confident — 8 students (14%)"><div class="bar-label">Become more confident</div><div class="bar-track"><div class="bar-fill" style="width:57.1%;background:linear-gradient(90deg,#93ebdd,#93ebddbb)"></div></div><div class="bar-val">8<span>14%</span></div></div>
+<div class="bar-row" title="Validate my business idea — 8 students (14%)"><div class="bar-label">Validate my business idea</div><div class="bar-track"><div class="bar-fill" style="width:57.1%;background:linear-gradient(90deg,#bff4ec,#bff4ecbb)"></div></div><div class="bar-val">8<span>14%</span></div></div>
+<div class="bar-row" title="Develop a business model — 7 students (12%)"><div class="bar-label">Develop a business model</div><div class="bar-track"><div class="bar-fill" style="width:50.0%;background:linear-gradient(90deg,#e0faf6,#e0faf6bb)"></div></div><div class="bar-val">7<span>12%</span></div></div>
+    </section>
+  </div>
+
+  <section>
+    <h2>Preferred AI features</h2>
+    <p class="cap">Multi-select. Interview generation and problem validation dominate — the two features the agent leads with.</p>
+    <div class="bar-row" title="Customer survey/interview generator — 52 students (93%)"><div class="bar-label">Customer survey/interview generator</div><div class="bar-track"><div class="bar-fill" style="width:100.0%;background:linear-gradient(90deg,#3b82f6,#3b82f6bb)"></div></div><div class="bar-val">52<span>93%</span></div></div>
+<div class="bar-row" title="AI problem validator — 44 students (79%)"><div class="bar-label">AI problem validator</div><div class="bar-track"><div class="bar-fill" style="width:84.6%;background:linear-gradient(90deg,#5e9bf8,#5e9bf8bb)"></div></div><div class="bar-val">44<span>79%</span></div></div>
+<div class="bar-row" title="Verified schemes/incubator guide — 19 students (34%)"><div class="bar-label">Verified schemes/incubator guide</div><div class="bar-track"><div class="bar-fill" style="width:36.5%;background:linear-gradient(90deg,#84b5fa,#84b5fabb)"></div></div><div class="bar-val">19<span>34%</span></div></div>
+<div class="bar-row" title="Customer feedback analysis — 19 students (34%)"><div class="bar-label">Customer feedback analysis</div><div class="bar-track"><div class="bar-fill" style="width:36.5%;background:linear-gradient(90deg,#a9cdfc,#a9cdfcbb)"></div></div><div class="bar-val">19<span>34%</span></div></div>
+<div class="bar-row" title="Pitch preparation coach — 17 students (30%)"><div class="bar-label">Pitch preparation coach</div><div class="bar-track"><div class="bar-fill" style="width:32.7%;background:linear-gradient(90deg,#cce1fd,#cce1fdbb)"></div></div><div class="bar-val">17<span>30%</span></div></div>
+<div class="bar-row" title="Market and competitor research assistant — 16 students (29%)"><div class="bar-label">Market and competitor research assistant</div><div class="bar-track"><div class="bar-fill" style="width:30.8%;background:linear-gradient(90deg,#e6f0fe,#e6f0febb)"></div></div><div class="bar-val">16<span>29%</span></div></div>
+<div class="bar-row" title="Business Model Canvas coach — 14 students (25%)"><div class="bar-label">Business Model Canvas coach</div><div class="bar-track"><div class="bar-fill" style="width:26.9%;background:linear-gradient(90deg,#e6f0fe,#e6f0febb)"></div></div><div class="bar-val">14<span>25%</span></div></div>
+<div class="bar-row" title="Progress tracker — 13 students (23%)"><div class="bar-label">Progress tracker</div><div class="bar-track"><div class="bar-fill" style="width:25.0%;background:linear-gradient(90deg,#e6f0fe,#e6f0febb)"></div></div><div class="bar-val">13<span>23%</span></div></div>
+<div class="bar-row" title="Marketing and branding assistant — 11 students (20%)"><div class="bar-label">Marketing and branding assistant</div><div class="bar-track"><div class="bar-fill" style="width:21.2%;background:linear-gradient(90deg,#e6f0fe,#e6f0febb)"></div></div><div class="bar-val">11<span>20%</span></div></div>
+<div class="bar-row" title="Costing/pricing/break-even calculator — 11 students (20%)"><div class="bar-label">Costing/pricing/break-even calculator</div><div class="bar-track"><div class="bar-fill" style="width:21.2%;background:linear-gradient(90deg,#e6f0fe,#e6f0febb)"></div></div><div class="bar-val">11<span>20%</span></div></div>
+  </section>
+
+  <div class="grid3">
+    <div class="likert"><div class="lik-head"><h4>Entrepreneurial interest</h4><span class="lik-avg">4.27<small>/5</small></span></div><div class="lik-grid"><div class="lik-cell" title="1/5 — 0 students"><div class="lik-bar" style="height:3%;background:#ff5d8f55"></div><span class="lik-n">0</span><span class="lik-s">1★</span></div><div class="lik-cell" title="2/5 — 0 students"><div class="lik-bar" style="height:3%;background:#ff5d8f77"></div><span class="lik-n">0</span><span class="lik-s">2★</span></div><div class="lik-cell" title="3/5 — 12 students"><div class="lik-bar" style="height:21%;background:#ff5d8f99"></div><span class="lik-n">12</span><span class="lik-s">3★</span></div><div class="lik-cell" title="4/5 — 17 students"><div class="lik-bar" style="height:30%;background:#ff5d8fcc"></div><span class="lik-n">17</span><span class="lik-s">4★</span></div><div class="lik-cell" title="5/5 — 27 students"><div class="lik-bar" style="height:48%;background:#ff5d8fff"></div><span class="lik-n">27</span><span class="lik-s">5★</span></div></div></div>
+    <div class="likert"><div class="lik-head"><h4>AI confidence</h4><span class="lik-avg">2.88<small>/5</small></span></div><div class="lik-grid"><div class="lik-cell" title="1/5 — 6 students"><div class="lik-bar" style="height:11%;background:#7c5cff55"></div><span class="lik-n">6</span><span class="lik-s">1★</span></div><div class="lik-cell" title="2/5 — 15 students"><div class="lik-bar" style="height:27%;background:#7c5cff77"></div><span class="lik-n">15</span><span class="lik-s">2★</span></div><div class="lik-cell" title="3/5 — 20 students"><div class="lik-bar" style="height:36%;background:#7c5cff99"></div><span class="lik-n">20</span><span class="lik-s">3★</span></div><div class="lik-cell" title="4/5 — 10 students"><div class="lik-bar" style="height:18%;background:#7c5cffcc"></div><span class="lik-n">10</span><span class="lik-s">4★</span></div><div class="lik-cell" title="5/5 — 5 students"><div class="lik-bar" style="height:9%;background:#7c5cffff"></div><span class="lik-n">5</span><span class="lik-s">5★</span></div></div></div>
+    <div class="likert"><div class="lik-head"><h4>Ease of finding a mentor</h4><span class="lik-avg">2.80<small>/5</small></span></div><div class="lik-grid"><div class="lik-cell" title="1/5 — 8 students"><div class="lik-bar" style="height:14%;background:#00c2a855"></div><span class="lik-n">8</span><span class="lik-s">1★</span></div><div class="lik-cell" title="2/5 — 14 students"><div class="lik-bar" style="height:25%;background:#00c2a877"></div><span class="lik-n">14</span><span class="lik-s">2★</span></div><div class="lik-cell" title="3/5 — 20 students"><div class="lik-bar" style="height:36%;background:#00c2a899"></div><span class="lik-n">20</span><span class="lik-s">3★</span></div><div class="lik-cell" title="4/5 — 9 students"><div class="lik-bar" style="height:16%;background:#00c2a8cc"></div><span class="lik-n">9</span><span class="lik-s">4★</span></div><div class="lik-cell" title="5/5 — 5 students"><div class="lik-bar" style="height:9%;background:#00c2a8ff"></div><span class="lik-n">5</span><span class="lik-s">5★</span></div></div></div>
+  </div>
+
+  <div class="grid2">
+    <section>
+      <h2>Support they asked for</h2>
+      <p class="cap">Multi-select support needs.</p>
+      <div class="bar-row" title="Business idea validation — 49 students (88%)"><div class="bar-label">Business idea validation</div><div class="bar-track"><div class="bar-fill" style="width:100.0%;background:linear-gradient(90deg,#84cc16,#84cc16bb)"></div></div><div class="bar-val">49<span>88%</span></div></div>
+<div class="bar-row" title="Networking with entrepreneurs — 18 students (32%)"><div class="bar-label">Networking with entrepreneurs</div><div class="bar-track"><div class="bar-fill" style="width:36.7%;background:linear-gradient(90deg,#9ddb3d,#9ddb3dbb)"></div></div><div class="bar-val">18<span>32%</span></div></div>
+<div class="bar-row" title="Funding and government scheme guidance — 15 students (27%)"><div class="bar-label">Funding and government scheme guidance</div><div class="bar-track"><div class="bar-fill" style="width:30.6%;background:linear-gradient(90deg,#b6e66a,#b6e66abb)"></div></div><div class="bar-val">15<span>27%</span></div></div>
+<div class="bar-row" title="Financial planning and pricing support — 13 students (23%)"><div class="bar-label">Financial planning and pricing support</div><div class="bar-track"><div class="bar-fill" style="width:26.5%;background:linear-gradient(90deg,#cdef97,#cdef97bb)"></div></div><div class="bar-val">13<span>23%</span></div></div>
+<div class="bar-row" title="Step-by-step startup guidance — 12 students (21%)"><div class="bar-label">Step-by-step startup guidance</div><div class="bar-track"><div class="bar-fill" style="width:24.5%;background:linear-gradient(90deg,#e2f5c5,#e2f5c5bb)"></div></div><div class="bar-val">12<span>21%</span></div></div>
+<div class="bar-row" title="Women entrepreneur role models — 12 students (21%)"><div class="bar-label">Women entrepreneur role models</div><div class="bar-track"><div class="bar-fill" style="width:24.5%;background:linear-gradient(90deg,#f1fae2,#f1fae2bb)"></div></div><div class="bar-val">12<span>21%</span></div></div>
+<div class="bar-row" title="Practical AI workshops — 11 students (20%)"><div class="bar-label">Practical AI workshops</div><div class="bar-track"><div class="bar-fill" style="width:22.4%;background:linear-gradient(90deg,#f1fae2,#f1fae2bb)"></div></div><div class="bar-val">11<span>20%</span></div></div>
+<div class="bar-row" title="One-to-one mentoring — 10 students (18%)"><div class="bar-label">One-to-one mentoring</div><div class="bar-track"><div class="bar-fill" style="width:20.4%;background:linear-gradient(90deg,#f1fae2,#f1fae2bb)"></div></div><div class="bar-val">10<span>18%</span></div></div>
+<div class="bar-row" title="Customer and market research training — 10 students (18%)"><div class="bar-label">Customer and market research training</div><div class="bar-track"><div class="bar-fill" style="width:20.4%;background:linear-gradient(90deg,#f1fae2,#f1fae2bb)"></div></div><div class="bar-val">10<span>18%</span></div></div>
+<div class="bar-row" title="Digital marketing training — 10 students (18%)"><div class="bar-label">Digital marketing training</div><div class="bar-track"><div class="bar-fill" style="width:20.4%;background:linear-gradient(90deg,#f1fae2,#f1fae2bb)"></div></div><div class="bar-val">10<span>18%</span></div></div>
+    </section>
+    <section>
+      <h2>Language, time and tools</h2>
+      <p class="cap">How the mentor has to fit into a student's actual week.</p>
+      <h4 style="margin:4px 0 10px">Preferred guidance language</h4>
+      <span class="pill" style="--c:#7c5cff">Hindi and English<b>38</b></span><span class="pill" style="--c:#9b7bff">Hindi<b>11</b></span><span class="pill" style="--c:#b79bff">English<b>7</b></span>
+      <h4 style="margin:14px 0 10px">Weekly time available</h4>
+      <span class="pill" style="--c:#00c2a8">1–2 hours<b>18</b></span><span class="pill" style="--c:#2fd4bd">Less than 30 minutes<b>17</b></span><span class="pill" style="--c:#63e0cd">3–4 hours<b>15</b></span><span class="pill" style="--c:#93ebdd">30 minutes to 1 hour<b>6</b></span>
+      <h4 style="margin:14px 0 10px">AI tools already used</h4>
+      <span class="pill" style="--c:#ff9f1c">ChatGPT<b>24</b></span><span class="pill" style="--c:#ffb545">Canva AI<b>21</b></span><span class="pill" style="--c:#ffc76e">Excel<b>16</b></span><span class="pill" style="--c:#ffd89b">Copilot<b>7</b></span><span class="pill" style="--c:#ffe8c4">None yet<b>4</b></span><span class="pill" style="--c:#fff4e2">Microsoft Copilot<b>3</b></span>
+      <h4 style="margin:14px 0 10px">Main AI concern</h4>
+      <span class="pill" style="--c:#ff5d8f">No major concern<b>11</b></span><span class="pill" style="--c:#ff8fab">Internet/device access<b>11</b></span><span class="pill" style="--c:#ffb3c6">Privacy/data security<b>9</b></span><span class="pill" style="--c:#ffc9d4">Cost of paid tools<b>8</b></span><span class="pill" style="--c:#ffdbe3">Do not know how to write prompts<b>7</b></span><span class="pill" style="--c:#ffe8ee">Incorrect AI information<b>6</b></span>
+    </section>
+  </div>
+
+  <div class="grid2">
+    <section>
+      <h2>Business types and motivation</h2>
+      <p class="cap">Preferred venture type and the reason behind it.</p>
+      <div class="grid2" style="gap:18px">
+        <div><div class="bar-row" title="Not decided yet — 10 students (18%)"><div class="bar-label">Not decided yet</div><div class="bar-track"><div class="bar-fill" style="width:100.0%;background:linear-gradient(90deg,#3b82f6,#3b82f6bb)"></div></div><div class="bar-val">10<span>18%</span></div></div>
+<div class="bar-row" title="Online business/e-commerce — 8 students (14%)"><div class="bar-label">Online business/e-commerce</div><div class="bar-track"><div class="bar-fill" style="width:80.0%;background:linear-gradient(90deg,#5e9bf8,#5e9bf8bb)"></div></div><div class="bar-val">8<span>14%</span></div></div>
+<div class="bar-row" title="Social enterprise — 7 students (12%)"><div class="bar-label">Social enterprise</div><div class="bar-track"><div class="bar-fill" style="width:70.0%;background:linear-gradient(90deg,#84b5fa,#84b5fabb)"></div></div><div class="bar-val">7<span>12%</span></div></div>
+<div class="bar-row" title="Food/bakery/products — 7 students (12%)"><div class="bar-label">Food/bakery/products</div><div class="bar-track"><div class="bar-fill" style="width:70.0%;background:linear-gradient(90deg,#a9cdfc,#a9cdfcbb)"></div></div><div class="bar-val">7<span>12%</span></div></div>
+<div class="bar-row" title="Digital/creative services — 7 students (12%)"><div class="bar-label">Digital/creative services</div><div class="bar-track"><div class="bar-fill" style="width:70.0%;background:linear-gradient(90deg,#cce1fd,#cce1fdbb)"></div></div><div class="bar-val">7<span>12%</span></div></div>
+<div class="bar-row" title="Sustainable products — 6 students (11%)"><div class="bar-label">Sustainable products</div><div class="bar-track"><div class="bar-fill" style="width:60.0%;background:linear-gradient(90deg,#e6f0fe,#e6f0febb)"></div></div><div class="bar-val">6<span>11%</span></div></div></div>
+        <div><div class="bar-row" title="Creating employment — 15 students (27%)"><div class="bar-label">Creating employment</div><div class="bar-track"><div class="bar-fill" style="width:100.0%;background:linear-gradient(90deg,#ff5d8f,#ff5d8fbb)"></div></div><div class="bar-val">15<span>27%</span></div></div>
+<div class="bar-row" title="Solving a community problem — 11 students (20%)"><div class="bar-label">Solving a community problem</div><div class="bar-track"><div class="bar-fill" style="width:73.3%;background:linear-gradient(90deg,#ff8fab,#ff8fabbb)"></div></div><div class="bar-val">11<span>20%</span></div></div>
+<div class="bar-row" title="Financial independence — 9 students (16%)"><div class="bar-label">Financial independence</div><div class="bar-track"><div class="bar-fill" style="width:60.0%;background:linear-gradient(90deg,#ffb3c6,#ffb3c6bb)"></div></div><div class="bar-val">9<span>16%</span></div></div>
+<div class="bar-row" title="Flexible work — 7 students (12%)"><div class="bar-label">Flexible work</div><div class="bar-track"><div class="bar-fill" style="width:46.7%;background:linear-gradient(90deg,#ffc9d4,#ffc9d4bb)"></div></div><div class="bar-val">7<span>12%</span></div></div>
+<div class="bar-row" title="Supporting family — 7 students (12%)"><div class="bar-label">Supporting family</div><div class="bar-track"><div class="bar-fill" style="width:46.7%;background:linear-gradient(90deg,#ffdbe3,#ffdbe3bb)"></div></div><div class="bar-val">7<span>12%</span></div></div>
+<div class="bar-row" title="Turning passion into business — 7 students (12%)"><div class="bar-label">Turning passion into business</div><div class="bar-track"><div class="bar-fill" style="width:46.7%;background:linear-gradient(90deg,#ffe8ee,#ffe8eebb)"></div></div><div class="bar-val">7<span>12%</span></div></div></div>
+      </div>
+    </section>
+    <section>
+      <h2>Willingness to use the mentor</h2>
+      <p class="cap">Stated intent after a one-line description of AI Startup Sathi.</p>
+      <div class="bar-row" title="Probably yes — 24 students (43%)"><div class="bar-label">Probably yes</div><div class="bar-track"><div class="bar-fill" style="width:100.0%;background:linear-gradient(90deg,#84cc16,#84cc16bb)"></div></div><div class="bar-val">24<span>43%</span></div></div>
+<div class="bar-row" title="Definitely yes — 23 students (41%)"><div class="bar-label">Definitely yes</div><div class="bar-track"><div class="bar-fill" style="width:95.8%;background:linear-gradient(90deg,#9ddb3d,#9ddb3dbb)"></div></div><div class="bar-val">23<span>41%</span></div></div>
+<div class="bar-row" title="Not sure — 8 students (14%)"><div class="bar-label">Not sure</div><div class="bar-track"><div class="bar-fill" style="width:33.3%;background:linear-gradient(90deg,#b6e66a,#b6e66abb)"></div></div><div class="bar-val">8<span>14%</span></div></div>
+<div class="bar-row" title="Probably no — 1 students (2%)"><div class="bar-label">Probably no</div><div class="bar-track"><div class="bar-fill" style="width:4.2%;background:linear-gradient(90deg,#cdef97,#cdef97bb)"></div></div><div class="bar-val">1<span>2%</span></div></div>
+      <div class="insight" style="margin-top:16px">
+        <b>Read this as a design signal.</b>
+        <p>47 of 56 (84%) said they would definitely or probably use it, while only 2.88/5 average AI confidence means the product must teach prompting and stay free — not assume digital fluency.</p>
+      </div>
+    </section>
+  </div>
+
+  <section>
+    <h2>In their own words</h2>
+    <p class="cap">Sampled from the open-ended response field.</p>
+    <div class="quotes"><figure class="quote"><blockquote>I need practical guidance and a clear sequence of steps to start.</blockquote><figcaption>Student respondent · pilot interview</figcaption></figure><figure class="quote"><blockquote>I need step-by-step guidance and feedback before taking a risk.</blockquote><figcaption>Student respondent · pilot interview</figcaption></figure><figure class="quote"><blockquote>I need a simple way to understand customers and competitors.</blockquote><figcaption>Student respondent · pilot interview</figcaption></figure></div>
+  </section>
+
+  <footer>
+    Source: <b>AI_Startup_Saathi_Responses.xlsx</b> — sheet <i>Respondent_Data</i>, 56 records, 22 fields.
+    Percentages are of all 56 respondents; multi-select questions can sum above 100%. Means use a 1–5 scale.
+    Pilot data, n = 56 — not a statistically representative survey and not a validated market finding.
+  </footer>
+</div>
+</body>
+</html>
